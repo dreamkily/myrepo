@@ -1,5 +1,4 @@
 ### Paper
-[TOC]
 #### 1.ADVENT: Adversarial Entropy Minimization for Domain Adaptation in Semantic Segmentation
 用像素级别的熵损失来处理语义分割非监督域适应（unsupervised domain adaptation）问题
 **概述**
@@ -59,49 +58,12 @@ $$\mathcal{L}_{\text {adv }}\left(X_{t}\right)=\mathbb{E}_{\mathbf{x}_{t} \sim X
 $$d\left(p_{1}, p_{2}\right)=\frac{1}{K} \sum_{k=1}^{K}\left|p_{1 k}-p_{2 k}\right|$$
 + 在C阶段，与B阶段相反，固定两个分类器，优化特征生成器G，使得特征对两个分类器效果尽可能一样：
 $$\min _{G} \mathcal{L}_{\mathrm{adv}}\left(X_{t}\right)$$
-B阶段和C阶段的训练过程可以用下图来表示：
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+B阶段和C阶段的训练过程可以用下图来表示
 
 ![Alt text](./1596854178261.png)
 
 **总结**
 文章的方法思想非常简单，实现也很容易，但是效果却比那些重量级的、需要反复调整参数的方法有效的多，入选2018年CVPR的oral文章。
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #### 3. Catastrophic Forgetting Meetings Negative Transfer: Batch Spectral Shrinkage for Safe Transfer Learning
 降低奇异值增强模型的泛化能力
 **abstract**
@@ -111,16 +73,11 @@ B阶段和C阶段的训练过程可以用下图来表示：
 主要介绍两种导致fine-tune效果变差的原因，首先是灾难性遗忘，即模型在学习与目标任务相关的信息时，容易突然失去之前所学的知识，导致过度拟合，第二个是负迁移，并非所有预先训练得到的知识都可以跨域进行迁移，且不加选择的迁移所有的知识对模型来说是有害的。
 首先作者提到了在优化fine-tune的先驱者们提出的算法，L2指的是在训练时直接正则化参数，L2-SP认为应该使用预训练模型中的信息来正则化某些参数，而非直接正则化所有参数，DELTA使用了注意力机制，使用了feature map中的知识。
 基于奇异值分解，作者提出了batch spectral shrinkage(BSS)，来指引模型中参数和特征的可迁移性，进而增强模型迁移后的性能。
-
-
 **算法**
-
 $\sigma$是网络提出的特征的奇异值，这里用了$-i$是因为从后往前数，思想就是把奇异值小的部分给压制住。
 $$L_{\mathrm{bss}}(F)=\eta \sum_{i=1}^{k} \sigma_{-i}^{2}$$
 因此网络总体的loss就是：
 $$\min _{\mathbf{W}} \sum_{i=1}^{n} L\left(G\left(F\left(\mathbf{x}_{i}\right)\right), y_{i}\right)+\Omega(\mathbf{W})+L_{\mathrm{bss}}(F)$$
-
-
 #### 4. Deep Metric Learning via Lifted Structured Feature Embedding
 **摘要**
 &#8195;&#8195;本文提出一种距离度量的方法，充分的发挥training batches的优势，by lifting the vector of pariwise distances within the batch to the matrix of pairwise distances
@@ -143,22 +100,9 @@ $$\begin{aligned} \tilde{J}_{i, j} &=\log \left(\sum_{(i, k) \in \mathcal{N}} \e
 $$\frac{\partial \tilde{J}}{\partial D_{i, j}}=\frac{1}{|\mathcal{P}|} \tilde{J}_{i, j} \mathbb{1}\left[\tilde{J}_{i, j}>0\right]$$
 $$\frac{\partial \tilde{J}}{\partial D_{i, k}}=\frac{1}{|\mathcal{P}|} \tilde{J}_{i, j} \mathbb{1}\left[\tilde{J}_{i, j}>0\right] \frac{-\exp \left\{\alpha-D_{i, k}\right\}}{\exp \left\{\tilde{J}_{i, j}-D_{i, j}\right\}}$$
 $$\frac{\partial \tilde{J}}{\partial D_{j, l}}=\frac{1}{|\mathcal{P}|} \tilde{J}_{i, j} \mathbb{1}\left[\tilde{J}_{i, j}>0\right] \frac{-\exp \left\{\alpha-D_{j, l}\right\}}{\exp \left\{\tilde{J}_{i, j}-D_{i, j}\right\}}$$
-
-
-
-
-
-
-
-
-
 #### 5. Semi-supervised Domain Adaptation via Minimax Entropy
 &#8196;&#8195;现阶段，关于半监督领域自适应学习的论文文献依然数量比较少。
 作者一开始指出UDA能够通过匹配分布的方法来提升模型对目标域无标签样本的泛化性，但是却在目标域上无法学习到具有判别性的'类别边界'。作者就提出在目标域训练样本中增加少量的有标签样本来实现获取模型对目标域具有区别性的特征，并提出了一种叫做Minimax Entropy(MME)的方法来实现此目标。MME方法是一种基于对无标记数据的条件熵以及任务损失的优化极小极大损失，他能够减小分布差异，又能学习任务具有区别性的特征，作者使用这种方法来评估每一种类别具有代表性的数据点，以及提取判别性特征。
-
-
-
-
 ####6. Conditional Adversarial Domain Adaptation
 **背景**
 对抗学习已经被嵌入到深度网络中通过学习到可迁移的特征进行适应，并取得了不错的成果，作者指出当前的一些对抗域适应方法仍然存在问题：1.只是独立的对齐特征而没有对齐标签，而这往往是不充分的 2.当数据分布体现出复杂的多模态结构时，对抗性自适应方法可能无法捕获这种多模态结构，换句话说即使网络训练收敛，判别器完全被混淆，分辨不出样本来自哪个域，也无法保证此时源域和目标域足够相似(没有捕获到数据的多模态结构)。3.条件域判别器中使用最大最小优化方法也许存在一定的问题，因为与判别器强制不同的样本具有相同的重要性，然而那些不确定预测的难迁移样本也许会对抗适应产生不良的影响，作者提出的条件对抗域适应网络(CDANs)在一定的程度上解决了三个问题，针对1，CDAN通过对齐特征-类别的联合分布解决，针对2，CDAN使用了Multilinear Condtioning多线性调整的方法来解决，针对3，作者提出了在目标函数中添加Entropy Conditioning熵调整来解决。
@@ -168,20 +112,10 @@ $$\frac{\partial \tilde{J}}{\partial D_{j, l}}=\frac{1}{|\mathcal{P}|} \tilde{J}
 Figure 1. CDAN图
 </center>
 &#8195;&#8195;上述框架很好理解，框架的前端通过深度神经网络，比如AlexNet/ResNet对源域和目标域提取特征$f$，然后得出预测结构$g$，$g$得出预测标签。
-
-
-
-
-
-
-
 &#8196;&#8195;在最近的条件生成对抗网络Conditional Generative Adversarial Networks(CGAN)中揭示了不同的分布可以在相关信息上调整生成器和判别器匹配的更好，例如：将标签和附属状态关联，CGAN可以在具有高可变性和多模态的分布数据集上生成全局一致图像，收到CGAN的启示，作者观察到在对抗域适应中，<font face="微软雅黑" color='red'>分类器预测结果g中携带了潜在的揭露了多模态结果的判别信息</font>，这可以在对齐特征$f$时用于调整，从而在网络训练过程中捕获多模态信息，通过链接变量$h=(f,g)$在分类器预测结果$g$上调整域判别器$D$,这样可以解决上面所说的前两个问题，而最简单的一种连接方式就是$f \oplus g$，将$f \oplus g$丢入到判别器$D$中，这种连接策略被现有的CGANs方法中广泛的采用，然而这种连接策略中，$f$和$g$是相互独立的，导致了不能很好的捕捉到特征与分类器预测结果之间的相乘交互，而这对于域适应是至关重要的，作为结果，分类器预测中传达的多模态信息不能被充分利用来匹配复杂域的多峰分布。
 **熵调整**
 &#8196;&#8195;条件域判别器中使用最大最小优化方法也许存在一定的问题，因为与判别器强制不同的样本具有相同的重要性，然而那些不确定预测的难迁移样本也许会对对抗适应产生不良的影响。为了减少这种影响，作者通过熵$H(g)=-\sum_{c=1}^{C} g_{c} \log \left(g_{c}\right)$来定量分类器预测结果的不确定性，而预测结果的确定性则可以被计算为$e^{-H(g)}$。然后通过这种基于熵的确定性策略调整域判别器，然后最终的CDAN使用的minimax的目标函数则为：
 $$\begin{aligned} \min _{G} & \frac{1}{n_{s}} \sum_{i=1}^{n_{s}} L\left(G\left(\mathbf{x}_{i}^{s}\right), \mathbf{y}_{i}^{s}\right) \\+& \frac{\lambda}{n_{s}} \sum_{i=1}^{n_{s}} e^{-H\left(\mathbf{g}_{i}^{s}\right)} \log \left[D\left(T\left(\mathbf{h}_{i}^{s}\right)\right)\right]+\frac{\lambda}{n_{t}} \sum_{j=1}^{n_{t}} e^{-H\left(\mathbf{g}_{j}^{t}\right)} \log \left[1-D\left(T\left(\mathbf{h}_{j}^{t}\right)\right)\right] \\ \max _{D} & \frac{1}{n_{s}} \sum_{i=1}^{n_{s}} e^{-H\left(\mathbf{g}_{i}^{s}\right)} \log \left[D\left(T\left(\mathbf{h}_{i}^{s}\right)\right)\right]+\frac{1}{n_{t}} \sum_{j=1}^{n_{t}} e^{-H\left(\mathbf{g}_{j}^{t}\right)} \log \left[1-D\left(T\left(\mathbf{h}_{j}^{t}\right)\right)\right] \end{aligned}$$
-
-
-
 #### 6. GCAN: Graph Convolutional Adversarial Network for Unsupervised Domain Adaptation
 **主要思想**
 为实现源域和目标域之间的迁移学习或特征对齐，作者认为有三种重要的信息类型需要学习：数据结构、域标签和类标签。提出了一种端到端的图卷积对抗网络(GCAN)，通过在同意的深度模型中对数据结构、域标签或类标签进行联合建模，实现无监督域自适应。设计三种有效的对齐机制包括结构感知对齐、域对齐和类中心对齐，能够有效的学习域不变和语义表示，减少域自适应的离散性。
@@ -192,7 +126,6 @@ Class label: 类标签，特别是目标域伪标签，通常被用来强制语�
 + GCAN在无监督域自适应算法中的作用
 + 三种信息的联合建模
 + 三种有效的对齐机制
-
 **图卷积对抗网络**
 + 整体目标函数
 $$\begin{aligned} \mathcal{L}\left(\mathcal{X}_{S}, \mathcal{Y}_{S}, \mathcal{X}_{T}\right) &=\mathcal{L}_{C}\left(\mathcal{X}_{S}, \mathcal{Y}_{S}\right)+\lambda \mathcal{L}_{D A}\left(\mathcal{X}_{S}, \mathcal{X}_{T}\right) \\ &+\gamma \mathcal{L}_{C A}\left(\mathcal{X}_{S}, \mathcal{Y}_{S}, \mathcal{X}_{T}\right)+\eta \mathcal{L}_{T} \end{aligned}$$
@@ -211,11 +144,6 @@ $$\mathcal{L}_{T}=\max \left(\left\|\mathbf{X}_{s c_{a}}-\mathbf{X}_{s c_{p}}\ri
 作者指出，特征具有领域不变性(Domain Invariance)与结构一致性(Structure Consistency)并不意味着具有判别性(Discriminability)。于是，作者利用构建源域/目标域特征的聚类中心保证所学到的特征的判别能力。
 第一步，通过目标分类器$F$获得目标域的伪标签，第二步，通过有标签样本和伪标签样本计算类中心或形心(centriod)。中心对齐目标函数：
 $$\mathcal{L}_{C A}\left(\mathcal{X}_{S}, \mathcal{Y}_{S}, \mathcal{X}_{T}, \mathcal{Y}_{T}\right)=\sum_{k=1}^{K} \phi\left(\mathcal{C}_{S}^{k}, \mathcal{C}_{T}^{k}\right)$$
-
-
-
-
-
 #### 7. Semi-supervised classification with graph convolutional networks
 **摘要**
 &#8196;&#8196;通过谱图卷积的局部一阶近似，来确定卷积神经网络的结构，该模型在图的边数上线性缩放，该模型学习隐藏层表示，这些表示即编码局部图结构，也编码节点特征，通过图结构数据中部分有标签的节点数据对卷积神经网络模型训练，使网络模型对其余无标签的数据进行进一步的分类。
